@@ -4,15 +4,12 @@ module.exports = (sequelize, DataTypes) => {
     fechaAtencion: DataTypes.STRING,
     Nhistorial: DataTypes.BIGINT,
     nombreDoctor: DataTypes.TEXT,
-    apellidoD1: DataTypes.TEXT,
-    apellidoD2: DataTypes.TEXT,
     motivoConsulta: DataTypes.TEXT,
-    diagnostico: DataTypes.TEXT,
+    diagnostico: DataTypes.JSON,
     tratamiento: DataTypes.TEXT,
     observaciones: DataTypes.TEXT,
     idCita: DataTypes.INTEGER,
     idDoctor: DataTypes.STRING,
-    idEnfermera: DataTypes.STRING
   }, {});
   emergencia.associate = function(models) {
     // associations can be defined here

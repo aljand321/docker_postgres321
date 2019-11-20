@@ -16,18 +16,12 @@ module.exports = {
       },
       nombreDoctor: {
         type: Sequelize.TEXT
-      },
-      apellidoD1: {
-        type: Sequelize.TEXT
-      },
-      apellidoD2: {
-        type: Sequelize.TEXT
-      },
+      },     
       motivoConsulta: {
         type: Sequelize.TEXT
       },
       diagnostico: {
-        type: Sequelize.TEXT
+        type: Sequelize.JSON
       },
       tratamiento: {
         type: Sequelize.TEXT
@@ -45,9 +39,6 @@ module.exports = {
         }
       },
       idDoctor: {
-        type: Sequelize.STRING
-      },
-      idEnfermera: {
         type: Sequelize.STRING
       },
       createdAt: {

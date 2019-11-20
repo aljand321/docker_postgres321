@@ -50,18 +50,15 @@ class Emergencias {
           const  { idCita }  = req.params
           return emergencia
           .create({
-              fechaAtencion,
-              Nhistorial,
-              nombreDoctor,
-              apellidoD1,
-              apellidoD2,
-              motivoConsulta,
-              diagnostico,
-              tratamiento,
-              observaciones,
-              idCita,
-              idDoctor,
-              idEnfermera            
+            fechaAtencion,
+            Nhistorial,
+            nombreDoctor,
+            motivoConsulta,
+            diagnostico,
+            tratamiento,
+            observaciones,
+            idCita,
+            idDoctor           
           })
           .then(data => res.status(200).send({
               success: true,
