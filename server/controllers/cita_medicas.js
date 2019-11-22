@@ -141,12 +141,12 @@ class Citas_medica {
       }
       //serv para camviar el estado de cita_medica
       static estado(req,res){
-        var estado;
+        var estado1 = 'false';
         return Citas_Medicas
         .findByPk(req.params.id)
         .then((data) => {
           data.update({
-            estado : estado  || data.estado == false
+            estado : estado1
           })
           .then(update => {
             res.status(200).send({

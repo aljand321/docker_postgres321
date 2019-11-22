@@ -69,8 +69,6 @@ class papeletaInt{
                 fechaIngreso, 
                 Historial, 
                 nombreDoctor,
-                apellidoD1,
-                apellidoD2,
                 diagnostico,
                 especialidad,   // esto es el area de internacion a la que va estar registrado el paciente
                 idConsultaMedica,  // este id se llena cuando se registran los datos desde consulta medica
@@ -238,8 +236,8 @@ class papeletaInt{
               .catch(error => res.status(400).send(error));
             })
             .catch(error => res.status(400).send(error));
-              }
-            })
+          }
+    })
       
   }
   // este serv va a mostrar los datos de tipo true solamente
@@ -326,6 +324,37 @@ class papeletaInt{
       .catch(error => res.status(400).send(error))
     })
   }
+}
+
+setInterval(update_estado, 60000 )  
+
+function update_estado (req,res){
+  return PapeletaInternacion                
+  .findAll({
+    where:{estado_update : true}
+  })
+  .then(data => {
+    var estado_update1 = 'false'
+    if(data != ""){
+      for (var i = 0; i < data.length; i++){
+        console.log(data[i].id," entro no se por que")
+       
+        return PapeletaInternacion
+        .findByPk(data[i].id)
+        .then((data) => { 
+          data.update({
+            estado_update:estado_update1 
+          })
+          .then(update => {
+            console.log(update.estado_update," estado actualizado")
+          })
+          .catch(error => res.status(400).send(error));
+        })
+        .catch(error => res.status(400).send(error));
+      }
+      
+    }
+  });  
 }
 
 export default papeletaInt

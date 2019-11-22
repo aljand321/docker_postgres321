@@ -146,6 +146,8 @@ app.post('/api/updateEmergencia/:id', Emergencias.updateEmergencia);
 app.get('/api/emergenciaData/:id', Emergencias.dataEmergecnai); // este serv sirve para mostrar emergencia segun id
 app.get('/api/EmergenciaP/:id', Emergencias.emergenciaP); // esta ruta sirve para mostrar una emergencia del paciente segun si id de la emergencia
 
+app.get('/api/one_consulta_emg/:id', Emergencias.one_consulta_emg)
+
 //Internaciones
 app.post('/api/internaciones/:idPinternacion/:idCama', Intern.Internacion);
 app.get('/api/internciones', Intern.listInternaciones);

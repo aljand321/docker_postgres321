@@ -158,19 +158,9 @@ class Receta {
     }
   static getReceta(req, res) {
     return Recetas
-     .findAll({
-      include:[
-        {model : Consultas, attributes:['id'],
-       include:[{
-         model : Citas_Medicas, attributes:['id'],
-         include:[{
-           model : Pacientes, attributes:['id','nombre', 'apellidop','apellidom']
-         }]
-       }]}
-      ]
-     })
+     .findAll()
      .then(Recetas => res.status(200).send(Recetas));
-    }
+  }
 
     //para mostrar receta segun consulta
     static onlyReceta(req, res){                
@@ -203,52 +193,78 @@ class Receta {
        });   
     }
     static updateReceta(req, res) {
-      console.log(req.params.id, "   esto<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      console.log(req.body)
       const { estado,historiaClinica, fecha,posologia,farmaco,viaAdmincion,doctor,indicaciones,unidades,informacionAd,instruciones,medicamentos  } = req.body
       return Recetas
-        .findByPk(req.params.id)
-        .then((data) => {
-          data.update({
-            estado:estado || data.estado,
-            historiaClinica: historiaClinica || data.historiaClinica,
-            fecha: fecha || data.fecha,  
-            posologia: posologia || data.posologia,  
-            farmaco: farmaco || data.farmaco,  
-            viaAdmincion: viaAdmincion || data.viaAdmincion,  
-            doctor: doctor || data.doctor,  
-            indicaciones: indicaciones || data.indicaciones,  
-            unidades: unidades || data.unidades,
-            informacionAd:informacionAd || data.informacionAd,
-            instruciones: instruciones|| data.instruciones,
-
-            medicamentos: medicamentos || data.medicamentos
-
+     .findAll({
+       where :{ id : req.params.id }
+     })
+     .then(datos => {
+        if (datos[0].estado == true){
+          res.status(400).json({
+            success:false,
+            msg:"Ya no se puede actualizar"
           })
-          .then(update => {
-            res.status(200).send({
-              success:true,
-              msg: 'Receta se a actualizo',
-              data: {
-                estado:estado || update.estado,
-                historiaClinica: historiaClinica || update.historiaClinica,
-                fecha: fecha || update.fecha,  
-                posologia: posologia || update.posologia,  
-                farmaco: farmaco || update.farmaco,  
-                viaAdmincion: viaAdmincion || update.viaAdmincion,  
-                doctor: doctor || update.doctor,  
-                indicaciones: indicaciones || update.indicaciones,  
-                unidades: unidades || update.unidades,
-                informacionAd:informacionAd || update.informacionAd,
-                instruciones: instruciones|| update.instruciones,
-                
-                medicamentos: medicamentos || update.medicamentos
-                
-              }
+        }else{
+          return Recetas
+          .findByPk(req.params.id)
+          .then((data) => {
+            data.update({
+              estado:estado || data.estado,
+              historiaClinica: historiaClinica || data.historiaClinica,
+              fecha: fecha || data.fecha,  
+              posologia: posologia || data.posologia,  
+              farmaco: farmaco || data.farmaco,  
+              viaAdmincion: viaAdmincion || data.viaAdmincion,  
+              doctor: doctor || data.doctor,  
+              indicaciones: indicaciones || data.indicaciones,  
+              unidades: unidades || data.unidades,
+              informacionAd:informacionAd || data.informacionAd,
+              instruciones: instruciones|| data.instruciones,
+  
+              medicamentos: medicamentos || data.medicamentos
+  
             })
+            .then(update => {
+              res.status(200).send({
+                success:true,
+                msg: 'Receta se a actualizo',
+                data: {
+                  estado:estado || update.estado,
+                  historiaClinica: historiaClinica || update.historiaClinica,
+                  fecha: fecha || update.fecha,  
+                  posologia: posologia || update.posologia,  
+                  farmaco: farmaco || update.farmaco,  
+                  viaAdmincion: viaAdmincion || update.viaAdmincion,  
+                  doctor: doctor || update.doctor,  
+                  indicaciones: indicaciones || update.indicaciones,  
+                  unidades: unidades || update.unidades,
+                  informacionAd:informacionAd || update.informacionAd,
+                  instruciones: instruciones|| update.instruciones,
+                  
+                  medicamentos: medicamentos || update.medicamentos
+                  
+                }
+              })
+            })
+            .catch(error => {
+              console.log(error);
+              res.status(400).json({
+                success:false,
+                msg: "Error no se puede actualizar los datos"
+              })
+            });
           })
-          .catch(error => res.status(400).send(error));
-        })
-        .catch(error => res.status(400).send(error));
+          .catch(error => {
+            console.log(error);
+            res.status(500).json({
+              success:false,
+              msg: "Error no se puede actualizar los datos"
+            })
+          });
+        }
+     });
+      
   }
    //serv para traer recetas con citas medicas
    static citaRecetas(req,res){
@@ -308,3 +324,43 @@ class Receta {
     
 }
 export default Receta;
+
+setInterval(update_estado, 60000 )  
+
+function update_estado (req,res){
+  return Recetas
+  .findAll({
+    where:{ estado : false }
+  })
+  .then(data => {
+    if(data)
+    for(var i = 0; i < data.length; i++){
+      console.log(data[i].id)
+      var estado1 = 'true'
+      return Recetas
+        .findByPk(data[i].id)
+        .then((data) => {
+          data.update({
+            estado: estado1,                              
+        })
+        .then(update => {
+          console.log (update, " Se actualizarion los datos")
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(400).json({
+              success:false,
+              msg: "no se puedo actualizar los datos"
+            })
+          });
+        })
+        .catch(error =>{
+          console.log(error)
+          res.status(500).json({
+            success:false,
+            msg: "no se puedo actualizar los datos"
+          })
+        });
+    }
+  });
+}
