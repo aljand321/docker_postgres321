@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const emergencia = sequelize.define('emergencia', {
+    estado_update: DataTypes.BOOLEAN,
     fechaAtencion: DataTypes.STRING,
     Nhistorial: DataTypes.BIGINT,
     nombreDoctor: DataTypes.TEXT,

@@ -8,34 +8,87 @@ const { alergias } = model;
       const {   numeroHistorial,nombre,apellidop,apellidom, ci, fechanacimiento, 
         sexo, estadocivil, direccion, zona, telef, ocupacion, idiomas, lugranacimiento, 
         departameto, provincia, municipio,id_user} = req.body
-        return Pacientes
-          .create({
-              numeroHistorial,
-              nombre,
-              apellidop,
-              apellidom,
-              ci,
-              fechanacimiento,
-              sexo,
-              estadocivil,
-              direccion,
-              zona,
-              telef,
-              ocupacion,
-              idiomas,
-              lugranacimiento,
-              departameto,
-              provincia,
-              municipio,
-              id_user
-           })
-           .then(pacienteData => res.status(201).send({
-              success: true,
-              message: 'Paciente creado',
-              pacienteData
-            }))
-       }
-  // lista de pacientes
+
+        if(!numeroHistorial || isNaN(numeroHistorial) || !nombre || !apellidop || !sexo){
+
+          if(!numeroHistorial || isNaN(numeroHistorial)){
+            res.status(400).json({
+              success:false,
+              msg:"El historial no se esta mandando o se esta mandando mal"
+            })
+          }else if (!nombre){
+            res.status(400).json({
+              success:false,
+              msg:"Nombre es obligatorio"
+            })
+          }else if (!apellidop){
+            res.status(400).json({
+              success:false,
+              msg:"Apellido paterno es Obligatorio"
+            })
+          }else if (!sexo){
+            res.status(400).json({
+              success:false,
+              msg:"Inserte si es hombre o mujer"
+            })
+          }
+        }else{
+          return Pacientes
+          .findAll({
+           where:{numeroHistorial : numeroHistorial}
+          })
+          .then( resp => {
+            if( resp == "" ){
+
+              return Pacientes
+              .findAll({
+               where:{ci : ci}
+              })
+              .then( datas => {
+                if(datas == ""){
+                  return Pacientes
+                  .create({
+                    numeroHistorial,
+                    nombre,
+                    apellidop,
+                    apellidom,
+                    ci,
+                    fechanacimiento,
+                    sexo,
+                    estadocivil,
+                    direccion,
+                    zona,
+                    telef,
+                    ocupacion,
+                    idiomas,
+                    lugranacimiento,
+                    departameto,
+                    provincia,
+                    municipio,
+                    id_user
+                   })
+                    .then(pacienteData => res.status(201).send({
+                      success: true,
+                      msg: 'Paciente creado',
+                      pacienteData
+                    }))
+                }else{
+                  res.status(400).json({
+                    success:false,
+                    msg:"El ci ya existe"
+                  })
+                }
+              })            
+            }else{
+              res.status(400).json({
+                success:false,
+                msg:"Se esta repitiendo el numero de historial"
+              })
+            }
+          });
+        }
+        
+    }
   static getPaciente(req, res) {
     return Pacientes
     .findAll({

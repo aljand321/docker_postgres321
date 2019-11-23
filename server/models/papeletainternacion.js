@@ -7,8 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     fechaIngreso: DataTypes.STRING,
     Historial: DataTypes.INTEGER,
     nombreDoctor: DataTypes.TEXT,
-    apellidoD1: DataTypes.TEXT,
-    apellidoD2: DataTypes.TEXT,
     diagnostico: DataTypes.TEXT,
     especialidad: DataTypes.STRING,
     idConsultaMedica: DataTypes.INTEGER,
