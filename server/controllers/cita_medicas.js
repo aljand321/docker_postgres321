@@ -1,9 +1,13 @@
 const fetch = require('node-fetch');
+const sequelize = require('sequelize');
+var sequelize1 = require("../models/index");
+const Op = sequelize.Op;
 
 import model from '../models';
 
 const { Citas_Medicas } = model;
 const { Pacientes } = model;
+
 class Citas_medica {
     
     static reg_cita(req, res) {
@@ -279,6 +283,41 @@ class Citas_medica {
       res.status(200).send(users)
     }) 
   }
+
+  static lista_consultas (req,res){
+    const { id_medico } = req.params;
+    const { fecha_inicio, fecha_final } = req.body
+    if(!fecha_inicio || !fecha_final){
+      res.status(400).json({
+        success:false,
+        msg:"Tdos los campos son obligatorios"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'false'}}, 
+        {especialidad: {[Op.eq]: 'CONSUL. EMERGENCIA'}}, {createdAt: {[Op.gte]: fecha_inicio}}, 
+        {createdAt: {[Op.lte]: fecha_final}}]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom'] }
+        ]
+      })      
+      .then(data => {
+          res.status(200).json(data)       
+      })
+      .catch(error => {
+          console.log(error)
+          res.status(500).json({
+              success:false,
+              msg: "no se pudo mostrar los datos",
+              error:error
+          })
+      })   
+    }
+    
+    
+  }
+
+  
 
   //pruebas
   static get_pruebas(req, res) {
