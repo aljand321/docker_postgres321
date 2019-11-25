@@ -89,7 +89,11 @@ app.get('/api/lista_pacienteDoctor_false/:id_medico', Citas_medica.lista_pacient
 app.get('/api/lista_emergencia/:id_medico', Citas_medica.lista_emergencia); //lista de citas solo de emergencia
 app.get('/api/lista_emergencia_false/:id_medico', Citas_medica.lista_emergencia_false);// lista false de emergencia
 
+app.post('/api/lista_consultas/:id_medico',Citas_medica.lista_consultas ) // ruta para buscar por fechas 
+
 app.get('/prueba',Citas_medica.get_pruebas)
+
+
 
 
 
@@ -150,6 +154,8 @@ app.get('/api/emergenciaData/:id', Emergencias.dataEmergecnai); // este serv sir
 app.get('/api/EmergenciaP/:id', Emergencias.emergenciaP); // esta ruta sirve para mostrar una emergencia del paciente segun si id de la emergencia
 
 app.get('/api/one_consulta_emg/:id', Emergencias.one_consulta_emg)
+
+app.get('/api/historial/:id_cita', Emergencias.historial_emg);
 
 //Internaciones
 app.post('/api/internaciones/:idPinternacion/:idCama', Intern.Internacion);
