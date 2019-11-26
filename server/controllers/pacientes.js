@@ -69,13 +69,13 @@ const { alergias } = model;
                    })
                     .then(pacienteData => res.status(201).send({
                       success: true,
-                      msg: 'Paciente creado',
+                      msg: 'Paciente Creado',
                       pacienteData
                     }))
                 }else{
                   res.status(400).json({
                     success:false,
-                    msg:"El ci ya existe"
+                    msg:"El C.I. ya existe"
                   })
                 }
               })            
