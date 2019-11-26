@@ -110,6 +110,7 @@ app.get('/api/one_consulta_id/:id_consulta', Consulta.One_Consulta_id)
 app.post('/api/reg_Receta/:id_consulta', Receta.post_recetaConsulta);
 app.post('/api/reg_RecetaEmrg/:id_emergencia', Receta.post_receta);
 app.get('/api/reg_Receta', Receta.getReceta);
+app.get( '/api/list_paciente_atendido',Receta.getReceta_atendido );
 app.get('/api/OnlyReceta/:id', Receta.onlyReceta); // receta segun consulta medica
 app.get('/api/RecetaEmergencia/:id', Receta.RecetaEmergencia); // receta segun emergencia
 app.get('/api/recitasOfEMG/:id', Receta.recOfEmg);
@@ -121,6 +122,8 @@ app.post('/api/updateReceta/:id', Receta.updateReceta);
 app.get('/receta/:id',Receta.citaRecetas); // para sacar receta y 
 
 app.get('/api/one_receta/:id_receta', Receta.one_receta);
+
+app.post ('/api/update_estado_atendido/:id', Receta.update_est_atnd);
 
 
 //papeleta de internacion

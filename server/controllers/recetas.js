@@ -158,7 +158,17 @@ class Receta {
     }
   static getReceta(req, res) {
     return Recetas
-     .findAll()
+     .findAll({
+       where : { estado_atendido : false }
+     })
+     .then(Recetas => res.status(200).send(Recetas));
+  }
+
+  static getReceta_atendido(req, res) {
+    return Recetas
+     .findAll({
+       where : { estado_atendido : true }
+     })
      .then(Recetas => res.status(200).send(Recetas));
   }
 
@@ -192,7 +202,7 @@ class Receta {
          res.status(200).json(data);
        });   
     }
-    static updateReceta(req, res) {
+  static updateReceta(req, res) {
       console.log(req.body)
       const { estado,historiaClinica, fecha,posologia,farmaco,viaAdmincion,doctor,indicaciones,unidades,informacionAd,instruciones,medicamentos  } = req.body
       return Recetas
@@ -320,6 +330,42 @@ class Receta {
     }).then(receta => {
       res.status(200).send(receta)
     })
+  }
+
+  //ruta para poder actuaizar el estado atenido del paciente
+  static update_est_atnd(req, res) {
+    const { estado_atendido } = req.body
+    return Recetas
+        .findByPk(req.params.id)
+        .then((data) => {
+          data.update({
+            estado_atendido:estado_atendido
+          })
+          .then(update => {
+            res.status(200).send({
+              success:true,
+              msg: 'Receta se a actualizo',
+              data: {
+                estado_atendido:estado_atendido || update.estado_atendido,            
+              }
+            })
+          })
+          .catch(error => {
+            console.log(error);
+            res.status(400).json({
+              success:false,
+              msg: "Error no se puede actualizar los datos"
+            })
+          });
+        })
+        .catch(error => {
+          console.log(error);
+          res.status(500).json({
+            success:false,
+            msg: "Error no se puede actualizar los datos"
+          })
+        });
+    
   }
     
 }

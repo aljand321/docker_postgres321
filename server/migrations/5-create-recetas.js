@@ -26,6 +26,11 @@ module.exports = {
           as: 'id_emergencia',
         }
       },
+      estado_atendido: {
+        type: Sequelize.BOOLEAN, 
+        allowNull: false, 
+        defaultValue: false
+      },
       estado: {
         type: Sequelize.BOOLEAN, 
         allowNull: false, 
