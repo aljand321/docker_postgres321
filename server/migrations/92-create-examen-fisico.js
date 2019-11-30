@@ -40,6 +40,24 @@ module.exports = {
       otros:{
         type: Sequelize.TEXT
       },
+      
+      pulso:{
+        type: Sequelize.STRING
+      },
+      estado_nutricional:{
+        type: Sequelize.STRING
+      },
+      presion_brazo_isquierdo:{
+        type: Sequelize.STRING
+      },
+      presion_brazo_derecho:{
+        type: Sequelize.STRING
+      },
+      imc:{
+        type: Sequelize.STRING
+      },
+
+
       id_paciente: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

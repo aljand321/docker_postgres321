@@ -27,7 +27,8 @@ class Examen_Fisico{
           })
         }
       }else{
-        const { peso,talla,temperatura,frecuencia_cardiaca,respiracion,presion,saturacion_oxigeno,fecha_revision,otros,id_user } = req.body;
+        const { peso,talla,temperatura,frecuencia_cardiaca,respiracion,presion,saturacion_oxigeno,fecha_revision,otros,
+          pulso, estado_nutricional, presion_brazo_isquierdo, presion_brazo_derecho, imc,id_user } = req.body;
         const { id_paciente } = req.params; 
         return examen_fisico
         .create({
@@ -40,6 +41,13 @@ class Examen_Fisico{
           saturacion_oxigeno,
           fecha_revision,
           otros,
+
+          pulso,
+          estado_nutricional,
+          presion_brazo_isquierdo, /// esta la precion aarteria en el brazo izquierdo
+          presion_brazo_derecho, /// esta la precion aarteria en el brazo derecho 
+          imc,
+          
           id_paciente,
           id_user 
         })
@@ -49,8 +57,7 @@ class Examen_Fisico{
             data
         }))
         .catch(error => res.status(400).send(error));
-      }id_paciente,
-      id_user 
+      }
         
     }
     static list_tesponsable(req,res){
@@ -70,18 +77,26 @@ class Examen_Fisico{
     }
 
     //mostrar un examen fisico para poder actualizar
-    static one_exFisco(req, res){                
-        const { id } = req.params
+    static one_exFisco(req, res){  
+            
+       const { id } = req.params
+       
         examen_fisico.findAll({
            where: {id: id}
            //attributes: ['id', ['description', 'descripcion']]
          }).then((data) => {
            res.status(200).json(data);
-         });     
+         });    
     }
     //ruta para poder actulizar una los examenes fisicos
     static update_exFisico(req, res) {
-        const { peso,talla,temperatura,frecuencia_cardiaca,respiracion,presion,saturacion_oxigeno,fecha_revision,otros } = req.body
+        const { peso,talla,temperatura,frecuencia_cardiaca,respiracion,presion,saturacion_oxigeno,fecha_revision,otros,
+          pulso,
+          estado_nutricional,
+          presion_brazo_isquierdo, /// esta la precion aarteria en el brazo izquierdo
+          presion_brazo_derecho, /// esta la precion aarteria en el brazo derecho 
+          imc, } = req.body
+          console.log(req.body, "   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         var estado_update = 'false'
         return examen_fisico
           .findByPk(req.params.id)
@@ -96,7 +111,12 @@ class Examen_Fisico{
               presion: presion || data.presion,
               saturacion_oxigeno: saturacion_oxigeno || data.saturacion_oxigeno,
               fecha_revision: fecha_revision || data.fecha_revision,
-              otros: otros|| data.otros
+              otros: otros|| data.otros,
+              pulso: pulso|| data.pulso,
+              estado_nutricional: estado_nutricional|| data.estado_nutricional,
+              presion_brazo_isquierdo: presion_brazo_isquierdo|| data.presion_brazo_isquierdo,
+              presion_brazo_derecho: presion_brazo_derecho|| data.presion_brazo_derecho,
+              imc: imc|| data.imc,
                                   
             })
             .then(update => {
@@ -113,7 +133,12 @@ class Examen_Fisico{
                   presion: presion || update.presion,
                   saturacion_oxigeno: saturacion_oxigeno || update.saturacion_oxigeno,
                   fecha_revision: fecha_revision || update.fecha_revision,
-                  otros: otros || update.otros
+                  otros: otros || update.otros,
+                  pulso: pulso|| update.pulso,
+                  estado_nutricional: estado_nutricional|| update.estado_nutricional,
+                  otrpresion_brazo_isquierdoos: presion_brazo_isquierdo|| update.presion_brazo_isquierdo,
+                  otpresion_brazo_derechoros: presion_brazo_derecho|| update.presion_brazo_derecho,
+                  imc: imc|| update.imc,
                 }
               })
             })
