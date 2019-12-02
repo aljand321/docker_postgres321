@@ -89,7 +89,11 @@ app.get('/api/lista_pacienteDoctor_false/:id_medico', Citas_medica.lista_pacient
 app.get('/api/lista_emergencia/:id_medico', Citas_medica.lista_emergencia); //lista de citas solo de emergencia
 app.get('/api/lista_emergencia_false/:id_medico', Citas_medica.lista_emergencia_false);// lista false de emergencia
 
+app.post('/api/lista_consultas/:id_medico',Citas_medica.lista_consultas ) // ruta para buscar por fechas 
+
 app.get('/prueba',Citas_medica.get_pruebas)
+
+
 
 
 
@@ -106,6 +110,7 @@ app.get('/api/one_consulta_id/:id_consulta', Consulta.One_Consulta_id)
 app.post('/api/reg_Receta/:id_consulta', Receta.post_recetaConsulta);
 app.post('/api/reg_RecetaEmrg/:id_emergencia', Receta.post_receta);
 app.get('/api/reg_Receta', Receta.getReceta);
+app.get( '/api/list_paciente_atendido',Receta.getReceta_atendido );
 app.get('/api/OnlyReceta/:id', Receta.onlyReceta); // receta segun consulta medica
 app.get('/api/RecetaEmergencia/:id', Receta.RecetaEmergencia); // receta segun emergencia
 app.get('/api/recitasOfEMG/:id', Receta.recOfEmg);
@@ -117,6 +122,8 @@ app.post('/api/updateReceta/:id', Receta.updateReceta);
 app.get('/receta/:id',Receta.citaRecetas); // para sacar receta y 
 
 app.get('/api/one_receta/:id_receta', Receta.one_receta);
+
+app.post ('/api/update_estado_atendido/:id', Receta.update_est_atnd);
 
 
 //papeleta de internacion
@@ -147,6 +154,8 @@ app.get('/api/emergenciaData/:id', Emergencias.dataEmergecnai); // este serv sir
 app.get('/api/EmergenciaP/:id', Emergencias.emergenciaP); // esta ruta sirve para mostrar una emergencia del paciente segun si id de la emergencia
 
 app.get('/api/one_consulta_emg/:id', Emergencias.one_consulta_emg)
+
+app.get('/api/historial/:id_cita', Emergencias.historial_emg);
 
 //Internaciones
 app.post('/api/internaciones/:idPinternacion/:idCama', Intern.Internacion);

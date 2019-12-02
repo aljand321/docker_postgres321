@@ -8,7 +8,7 @@ const { alergias } = model;
     static registroPaciente(req, res) {
       const {   numeroHistorial,nombre,apellidop,apellidom, ci, fechanacimiento, 
         sexo, estadocivil, direccion, zona, telef, ocupacion, idiomas, lugranacimiento, 
-        departameto, provincia, municipio,id_user} = req.body
+        departameto, provincia, municipio,id_user,tipoSangre } = req.body
 
         if(!numeroHistorial || isNaN(numeroHistorial) || !nombre || !apellidop || !sexo){
 
@@ -66,17 +66,18 @@ const { alergias } = model;
                     departameto,
                     provincia,
                     municipio,
-                    id_user
+                    id_user,
+                    tipoSangre
                    })
                     .then(pacienteData => res.status(201).send({
                       success: true,
-                      msg: 'Paciente creado',
+                      msg: 'Paciente Creado',
                       pacienteData
                     }))
                 }else{
                   res.status(400).json({
                     success:false,
-                    msg:"El ci ya existe"
+                    msg:"El C.I. ya existe"
                   })
                 }
               })            
@@ -145,7 +146,7 @@ const { alergias } = model;
         });  
   }
   static update_paciente_data(req, res) {
-    const { estadocivil,ocupacion,zona,telef } = req.body    
+    const { estadocivil,ocupacion,zona,telef,tipoSangre } = req.body    
       return Pacientes
       .findByPk(req.params.id_paciente)
       .then((data) => {
@@ -153,7 +154,8 @@ const { alergias } = model;
           estadocivil: estadocivil || data.estadocivil,
           zona: zona || data.zona,  
           telef: telef || data.telef,  
-          ocupacion: ocupacion || data.ocupacion
+          ocupacion: ocupacion || data.ocupacion,
+          tipoSangre: tipoSangre || data.tipoSangre
          
         })
         .then(update => {
@@ -164,8 +166,9 @@ const { alergias } = model;
               estadocivil: estadocivil || update.estadocivil,
               zona: zona || update.zona,  
               telef: telef || update.telef,  
-              ocupacion: ocupacion || update.ocupacion
-              
+              ocupacion: ocupacion || update.ocupacion,
+              tipoSangre: tipoSangre || data.tipoSangre
+         
             }
           })
         })

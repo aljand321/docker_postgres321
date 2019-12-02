@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
     saturacion_oxigeno: DataTypes.STRING,
     fecha_revision: DataTypes.STRING,
     otros:DataTypes.TEXT,
+
+    pulso:DataTypes.STRING,
+    estado_nutricional:DataTypes.STRING,
+    presion_brazo_isquierdo:DataTypes.STRING,
+    presion_brazo_derecho:DataTypes.STRING,
+    imc:DataTypes.STRING,
+
     id_paciente: DataTypes.INTEGER,
     id_user: DataTypes.INTEGER
   }, {});

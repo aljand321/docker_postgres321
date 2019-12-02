@@ -4,6 +4,10 @@ import Paciente from './pacientes';
 const { emergencia } = model;
 const { Citas_Medicas } = model;
 const { Pacientes } = model;
+
+const { Recetas } = model;
+const { PapeletaInternacion } = model;
+
 class Emergencias {
     static Emergencia(req, res){
         const { fechaAtencion, Nhistorial,nombreDoctor,motivoConsulta,diagnostico,tratamiento,observaciones,idDoctor } = req.body
@@ -201,6 +205,24 @@ class Emergencias {
        }).then((data) => {
          res.status(200).json(data);
       });     
+    }
+
+    // hiostorial clinico del paciente
+    static historial_emg(req,res){
+      const { id_cita } = req.params;
+      return emergencia
+      .findOne({
+        where : { idCita: id_cita },
+        //attributes:['id','numero_ficha', 'codigo_p', 'medico', 'especialidad'],
+        include:[
+          {model:Recetas}
+        ] 
+      })
+      .then(Citas_Medicas => res.status(200).send(Citas_Medicas))
+      .catch(error => {
+        console.log(error);
+        res.status(500).json(error)
+      })
     }
     
 }
