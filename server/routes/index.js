@@ -258,4 +258,6 @@ app.get('/api/estado_traslado/:id_traslado', Traslados.estado_traslado)
 app.post('/api/update_traslado/:id',Traslados.update_Traslado)
 
 
+////****filtros de pacientes */
+app.post('/api/filtro_pacientes', Paciente.filter_pacientes)///filtros
 };
