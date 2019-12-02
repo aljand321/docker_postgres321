@@ -45,41 +45,86 @@ class Sala {
             msg: 'Todos los espacios son requeridos'
         })
     } else{
-      fetch('http://localhost:4600/api/especialidad')
+      fetch('http://localhost:4600/api/one_esp_nombre/'+req.body.nombre)
       .then(resp => resp.json())
       .then(resp =>{
-        for(var i = 0; i< resp.length; i++){
-          if(resp[i].nombre == req.body.nombre){
-            var id = resp[i].id
-            console.log(id , " id ")
-            const { nombre, descripcionSala, piso } = req.body
-            return Salas
-            .create({
-              nombre,
-              descripcionSala,
-              piso
 
-            })
-            .then(data => {
-              res.status(200).json({
-                success: true,
-                message: 'Se inserto correctamente',
-                data
+        if(!resp){
+          res.status(400).json({
+            success: false,
+            msg:"Esa especialidad no esta registrada"
+          })
+        }else{
+          return Salas
+          .findAll({
+            where:{ nombre : req.body.nombre }
+          })
+          .then(sala => {
+            if (sala != ""){
+              for (var i = 0; i < sala.length; i++){
+                if( sala[i].descripcionSala == req.body.descripcionSala ){
+                  res.status(400).json({
+                    success:false,
+                    msg:"Ya existe la ubuacaión en esa descripción"
+                  })
+                }else{
+                  const { nombre, descripcionSala, piso } = req.body
+                  return Salas
+                  .create({
+                    nombre,
+                    descripcionSala,
+                    piso
+                  
+                  })
+                  .then(data => {
+                    res.status(200).json({
+                      success: true,
+                      msg: 'Se inserto correctamente',
+                      data
+                    })
+                  })
+                  .catch(error => {
+                    console.log(error)
+                    res.status(400).json({
+                      success:false,
+                      msg:"No se pudo insertar correctamente",
+                      error
+                    })
+                  });
+                }
+              }
+            }else{
+              const { nombre, descripcionSala, piso } = req.body
+              return Salas
+              .create({
+                nombre,
+                descripcionSala,
+                piso
+  
               })
-            })
-            .catch(error => {
-              console.log(error)
-              res.status(400).json({
-                success:false,
-                message:"No se pudo insertar correctamente",
-                error
+              .then(data => {
+                res.status(200).json({
+                  success: true,
+                  msg: 'Se inserto correctamente',
+                  data
+                })
               })
-            });
-          }
+              .catch(error => {
+                console.log(error)
+                res.status(400).json({
+                  success:false,
+                  msg:"No se pudo insertar correctamente",
+                  error
+                })
+              });
+            }
+          })
+          .catch(error => res.status(400).send(error));
+           
         }
-
       }).
       catch( error => {
+        console.log(error)
         res.status(500).json({
           success:false,
           msg:"No hay coneccion con el servidor",

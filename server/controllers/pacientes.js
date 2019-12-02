@@ -1,5 +1,6 @@
 import model from '../models';
-
+const sequelize = require('sequelize');
+const Op = sequelize.Op;
 const { Pacientes } = model;
 const { alergias } = model;
 
@@ -174,6 +175,35 @@ const { alergias } = model;
     
     
   }
+
+  ///***filtros de pacientes */
+  static filter_pacientes(req, res) {
+    const { fecha_inicio, fecha_final }  = req.body
+    if(!fecha_final || !fecha_inicio){
+        res.status(400).json({
+            success:false,
+            msg:"Inserte fecha inicio y fecha final  para poder buscar un rago de fechas"
+        })
+    }else{
+        var _q = Pacientes;
+        _q.findAll({
+        where: {[Op.and]: [{createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }}]},
+        })
+        .then(datas => {
+            if(datas == ""){
+                res.status(400).json({
+                    success:false,
+                    msg:"No hay nada que mostrar"
+                })
+            }else{
+                res.status(200).json(datas)
+            }
+            
+        }); 
+    }
+    
+
+}
 }
         
 export default Paciente;
