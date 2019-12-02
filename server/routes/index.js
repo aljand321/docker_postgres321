@@ -217,8 +217,11 @@ app.get('/api/list_receta_internacion', RecetaInternacion.listReceta_internacion
 app.post('/api/epicrisis/:id_internacion', Epicrisis.reg_epicrisis);
 app.get('/api/epicrisis', Epicrisis.getEpicrisis)
 app.get('/api/one_epicrisis/:id_internacion', Epicrisis.Epicrisis_intenracion);
+
 app.post('/api/update_epicrisis/:id', Epicrisis.updateEpicrisis);
+
 app.get('/api/deleteEpicrisis/:id', Epicrisis.deleteEpicrisis);
+
 
 //oreden de intervencion
 app.post('/api/reg_ordenIntervencion/:id_internacion', OrdenIntervencion.reg_OrdenIntervencion); //ruta para poder insertar en orden intervencion
@@ -226,6 +229,7 @@ app.get('/api/getOrdenIntervencion', OrdenIntervencion.getOrdenIntervencion );
 app.get('/api/List_Orden_intenrvencion/:id_internacion', OrdenIntervencion.list_Orden_intenrvencion); // lista de ordenes de intervencion del paciente
 app.post('/api/updateInternacion/:id', OrdenIntervencion.updateOrdenIntervencion);
 app.get('/api/One_Orden_intenrvencion/:id', OrdenIntervencion.One_Orden_intenrvencion); // sacar una orden de internacion
+
 
 
 //nota de evolucion
@@ -250,6 +254,8 @@ app.get('/api/list_traslados_esp_flase/:id_especialidad', Traslados.list_traslad
 
 app.get('/api/one_traslado/:id_traslado', Traslados.one_traslado)
 app.get('/api/estado_traslado/:id_traslado', Traslados.estado_traslado)
+
+app.post('/api/update_traslado/:id',Traslados.update_Traslado)
 
 
 };

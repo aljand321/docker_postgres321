@@ -222,6 +222,73 @@ class Traslados {
             .catch(error => res.status(400).send(error))
         })
     }
+
+    //ruta para poder actualizar un traslado
+    static update_Traslado(req, res) {
+     
+        const {enviado_de, operaciones, diagnostico_principal,otros_diagnosticos,causa_externa,id_especialidad} = req.body
+          traslados.findAll({
+            where: {id: req.params.id}
+          }).then((data) => {
+            console.log(data[0].estado_upadte, "  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>XX")
+            if (data[0].estado_upadte == false){
+              res.status(400).json({
+                success:false,
+                msg:" Este formulario ya se actualizo "
+              })
+            }else{
+              var estado = 'false'
+              return traslados
+                .findByPk(req.params.id)
+                .then((data) => {
+                  data.update({
+                     
+                    estado_upadte: estado,           
+        
+                    enviado_de: enviado_de || data.enviado_de,  
+                    operaciones: operaciones || data.operaciones,  
+                    diagnostico_principal: diagnostico_principal || data.diagnostico_principal,
+        
+                    otros_diagnosticos: otros_diagnosticos || data.otros_diagnosticos,  
+                    causa_externa: causa_externa || data.causa_externa,  
+                    id_especialidad: id_especialidad || data.id_especialidad
+        
+                  })
+                  .then(update => {
+                    res.status(200).send({
+                      success: true,
+                      msg: 'Se Modifico',
+                      data: {                  
+                        
+                        enviado_de: enviado_de || update.enviado_de,  
+                        operaciones: operaciones || update.operaciones,  
+                        diagnostico_principal: diagnostico_principal || update.diagnostico_principal,
+            
+                        otros_diagnosticos: otros_diagnosticos || update.otros_diagnosticos,  
+                        causa_externa: causa_externa || update.causa_externa,
+                        id_especialidad: id_especialidad || update.id_especialidad
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    console.log(error)
+                    res.status(400).json({
+                      success:false,
+                      msg:"No se pudo actualizar los datos"
+                    })
+                  });
+                })
+                .catch(error => {
+                  console.log(error)
+                  res.status(500).json({
+                    success:false,
+                    msg:"No se puede actualizar los datos error de servidor"
+                  })
+                });
+            }
+          });
+       
+    }
     
 
 }

@@ -209,7 +209,7 @@ class papeletaInt{
                 estado_update:estado_update || data.estado_update,
                 tipoConsulta: tipoConsulta || data.tipoConsulta,
 
-                Historial: Historial || data.Historial,  
+               
 
                 diagnostico: diagnostico || data.diagnostico, 
                 especialidad: especialidad || data.especialidad , 
@@ -224,8 +224,7 @@ class papeletaInt{
                     estado_update:estado_update || update.estado_update,
                     tipoConsulta: tipoConsulta || update.tipoConsulta,
                   
-                    Historial: Historial || update.Historial,  
-
+                  
                     diagnostico: diagnostico || update.diagnostico,
                     especialidad:especialidad || update.especialidad,
                     id_especialidad: id_especialidad || update.id_especialidad   

@@ -26,8 +26,8 @@ class Intern {
       }else{
         
         const { historial, fechaIngreso, provieneDE, observacion, especialidad, sala, cama, doctor, diagnostico, id_especialidad, id_user } = req.body 
-        if(historial == "" || isNaN(historial) || fechaIngreso == "" || provieneDE == "" || especialidad == "" || sala == "" || cama == "" || doctor == "" || diagnostico == ""){
-          if(historial == ""){
+        if( !historial || isNaN(historial) || !fechaIngreso || !provieneDE || !especialidad || !sala || !cama || !doctor || !diagnostico ){
+          if( !historial ){
             res.status(400).json({
               success:false,
               msg:"Historial no se esta mandando"
@@ -37,44 +37,46 @@ class Intern {
               success:false,
               msg:"Historial solo puede contener numeros"
             })
-          }else if (fechaIngreso == ""){
+          }else if (!fechaIngreso){
             res.status(400).json({
               success:false,
               msg:"Fehca es obligatorio"
             })
-          }else if(provieneDE == ""){
+          }else if(!provieneDE){
             res.status(400).json({
               success:false,
               msg:"Por favor indique el area de donde esta viniendo el paciente"
             })
-          }else if (especialidad == ""){
+          }else if (!especialidad){
             res.status(400).json({
               success:false,
               msg:"Inserte el area de internacion"
             })
-          }else if (sala == ""){
+          }else if (!sala){
             res.status(400).json({
               success:false,
               msg:"Inserte sala a la cual el paciente va estar internado"
             })
-          }else if (cama == ""){
+          }else if (!cama){
             res.status(400).json({
               success:false,
               msg:"Inserte la cama en la cual el paciente va estar internado"
             })
-          }else if (doctor == ""){
+          }else if (!doctor){
             res.status(400).json({
               success:false,
               msg:"Inserte el nombre del doctor por favor"
             })
-          }else if (diagnostico == ""){
+          }else if (!diagnostico){
             res.status(400).json({
               success:false,
               msg:"Inserte Diagnostico de prescripcion"
             })
           }
         }else{
-          const { idCama } = req.params
+
+          console.log(req.body);
+         const { idCama } = req.params
           const { idPinternacion } = req.params
           var id_paciente = datos[0].id;
           return Internaciones
@@ -429,7 +431,36 @@ class Intern {
       ]
     })
     .then(data => res.status(200).send(data));                       
-} 
+  } 
  }
 
+
+ setInterval( update_time, 60000 )  
+
+  function update_time (req,res){
+    return Internaciones                
+    .findAll({
+      where: { estado_update : 'true' }
+    })
+    .then(data => {
+      if(data != ""){
+        for(var i = 0; i < data.length; i++){
+          
+          var estado_update = 'false'
+          return Internaciones
+            .findByPk(data[i].id)
+            .then((data) => { 
+              data.update({
+                estado_update: estado_update || data.estado_update                  
+              })
+              .then(update => {
+                console.log(update.estado_update)  
+              })
+              .catch(error => res.status(400).send(error));
+            })
+            .catch(error => res.status(400).send(error));
+        }
+      }
+    });    
+  }
 export default Intern
