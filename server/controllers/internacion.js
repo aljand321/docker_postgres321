@@ -138,6 +138,22 @@ class Intern {
          });     
     }
 
+    static One_form_Internacion1(req, res){                
+      const { id_Pinternacion } = req.params
+      Internaciones.findAll({
+         where: {id: id_Pinternacion},
+         //attributes: ['id', ['description', 'descripcion']]
+         include:[
+          { model: Camas, attributes:['id','numeroCama'],
+         include:[
+           {model:Salas, attributes:['id','descripcionSala']}
+         ] }
+        ]
+       }).then((data) => {
+         res.status(200).json(data);
+       });     
+  }
+
     //esto elimina for internacion
     static delete_internacion(req, res) {
         const { id } = req.params
