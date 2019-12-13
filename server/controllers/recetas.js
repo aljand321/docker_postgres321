@@ -379,34 +379,38 @@ function update_estado (req,res){
     where:{ estado : false }
   })
   .then(data => {
-    if(data)
-    for(var i = 0; i < data.length; i++){
-      console.log(data[i].id)
-      var estado1 = 'true'
-      return Recetas
-        .findByPk(data[i].id)
-        .then((data) => {
-          data.update({
-            estado: estado1,                              
-        })
-        .then(update => {
-          console.log (update, " Se actualizarion los datos")
-        })
-        .catch(error => {
+    console.log(data)
+    if(data != ""){
+      console.log("  <<<<<<<<<<<<<<<<<<<<< < < < < < < < ")
+      for(var i = 0; i < data.length; i++){
+        console.log(data[i].id)
+        var estado1 = 'true'
+        return Recetas
+          .findByPk(data[i].id)
+          .then((data) => {
+            data.update({
+              estado: estado1,                              
+          })
+          .then(update => {
+            console.log (update, " Se actualizarion los datos")
+          })
+          .catch(error => {
+              console.log(error)
+              res.status(400).json({
+                success:false,
+                msg: "no se puedo actualizar los datos"
+              })
+            });
+          })
+          .catch(error =>{
             console.log(error)
-            res.status(400).json({
+            res.status(500).json({
               success:false,
               msg: "no se puedo actualizar los datos"
             })
           });
-        })
-        .catch(error =>{
-          console.log(error)
-          res.status(500).json({
-            success:false,
-            msg: "no se puedo actualizar los datos"
-          })
-        });
+      }
     }
+    
   });
 }

@@ -82,7 +82,43 @@ class Citas_medica {
       return Citas_Medicas
       .findAll()
       .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
-     }
+    }
+
+    static reporte_citas(req, res) {
+      /* const { turno } = req.params
+      return Citas_Medicas
+      .findAll({
+        where:{turno: turno, }
+      })
+      .then(Citas_Medicas => res.status(200).send(Citas_Medicas)); */
+      const { id_medico } = req.params;
+      const { fecha_inicio, fecha_final, turno, id_esp } = req.body
+      if(!fecha_inicio || !fecha_final || !turno || !id_esp ){
+        console.log("todo obligado")
+        res.status(400).json({
+          success:false,
+          msg:"Tdos los campos son obligatorios"
+        })
+      }else{
+        console.log("todo paso")
+        Citas_Medicas.findAll({
+          where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {turno: {[Op.eq]: turno}}, 
+          {id_especialidad: {[Op.eq]: id_esp}}, {createdAt: {[Op.gte]: fecha_inicio}}, 
+          {createdAt: {[Op.lte]: fecha_final}}]}
+        })      
+        .then(data => {
+            res.status(200).json(data)       
+        })
+        .catch(error => {
+            console.log(error)
+            res.status(500).json({
+                success:false,
+                msg: "no se pudo mostrar los datos",
+                error:error
+            })
+        })   
+      }   
+    }
 
      //rescatar cita medica segun historial
       static oneCita(req, res){                
@@ -186,12 +222,13 @@ class Citas_medica {
        }
 
        static updateCita(req, res) {
-        const { estado,codigo_p,turno,medico,especialidad,hora,saldo_total,id_medico } = req.body
+        const { estado,codigo_p,turno,medico,especialidad,hora,saldo_total,id_medico, estado_update } = req.body
         return Citas_Medicas
           .findByPk(req.params.id)
           .then((data) => {
             data.update({
               estado: estado || data.estado,
+              estado_update: estado_update || data.estado_update,
               codigo_p: codigo_p || data.codigo_p,  
               turno: turno || data.turno,  
               medico: medico || data.medico,  
@@ -206,6 +243,7 @@ class Citas_medica {
                 data: {
                   
                   estado: estado || update.estado,
+                  estado_update: estado_update || update.estado_update,
                   codigo_p: codigo_p || update.codigo_p,  
                   turno: turno || update.turno,  
                   medico: medico || update.medico,  
@@ -312,8 +350,7 @@ class Citas_medica {
               error:error
           })
       })   
-    }
-    
+    }    
     
   }
 

@@ -93,7 +93,7 @@ app.post('/api/lista_consultas/:id_medico',Citas_medica.lista_consultas ) // rut
 
 app.get('/prueba',Citas_medica.get_pruebas)
 
-
+app.post('/api/report_citas/:id_medico', Citas_medica.reporte_citas) // esto es para el reporte de citas medicas de una sola tabla
 
 
 
@@ -162,6 +162,9 @@ app.post('/api/internaciones/:idPinternacion/:idCama', Intern.Internacion);
 app.get('/api/internciones', Intern.listInternaciones);
 app.get('/api/delete_form_internacion/:id', Intern.delete_internacion);
 app.get('/api/one_Form_internacion/:id_Pinternacion', Intern.One_form_Internacion);
+
+app.get('/api/one_Form_internacion1/:id_Pinternacion', Intern.One_form_Internacion1);
+
 app.get('/api/list_internacion_paciente/:id_especialidad/:historial', Intern.list_internacion_paciente);
 app.post('/api/update_form_internacion/:id', Intern.update_form_internacion) // ruta para actulizar form internacion
 app.get('/api/One_Internacion/:id', Intern.One_Internacion);
