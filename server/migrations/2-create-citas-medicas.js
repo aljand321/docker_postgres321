@@ -18,6 +18,11 @@ module.exports = {
         allowNull: false, 
         defaultValue: true
       },
+      estado_update: {
+        type: Sequelize.BOOLEAN, 
+        allowNull: false, 
+        defaultValue: true
+      },
       codigo_p: {
         type: Sequelize.INTEGER,
       },

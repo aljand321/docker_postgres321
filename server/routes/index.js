@@ -93,7 +93,7 @@ app.post('/api/lista_consultas/:id_medico',Citas_medica.lista_consultas ) // rut
 
 app.get('/prueba',Citas_medica.get_pruebas)
 
-
+app.post('/api/report_citas/:id_medico', Citas_medica.reporte_citas) // esto es para el reporte de citas medicas de una sola tabla
 
 
 
