@@ -37,7 +37,7 @@ class Citas_medica {
           success:false,
           msg : "Por Favor inserte hora"
         })
-      }else if (!dia){
+      }else if (!req.body.dia){
         res.status(400).json({
           success:false,
           msg : "Por favor inserte dia"
