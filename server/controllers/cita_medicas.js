@@ -12,30 +12,35 @@ class Citas_medica {
     
     static reg_cita(req, res) {
      
-      if(req.body.especialidad == null){
+      if(!req.body.especialidad){
         res.status(400).json({
           success:false,
           msg : "Por favor selecione consultorio"
         })
-      }else if(req.body.medico == null){
+      }else if(!req.body.medico){
         res.status(400).json({
           success:false,
           msg : "Selecione medico por favor"
         })
-      }else if(req.body.turno == null){
+      }else if(!req.body.turno){
         res.status(400).json({
           success:false,
           msg : "Selecione turno por favor"
         })
-      }else if(req.body.saldo_total == null || isNaN(req.body.saldo_total)){
+      }else if(!req.body.saldo_total || isNaN(req.body.saldo_total)){
         res.status(400).json({
           success:false,
           msg : "Saldo solo puede contener numeros"
         })
-      }else if(req.body.hora == null){
+      }else if( !req.body.hora ){
         res.status(400).json({
           success:false,
           msg : "Por Favor inserte hora"
+        })
+      }else if (!dia){
+        res.status(400).json({
+          success:false,
+          msg : "Por favor inserte dia"
         })
       }      
       else{
@@ -44,13 +49,12 @@ class Citas_medica {
         .catch(error => console.error('Error',error))
         .then(resp => {
           if(resp != ""){
-            const { numero_ficha,estado,codigo_p,turno,medico,especialidad,hora,saldo_total,id_user,id_medico } = req.body
+            const { codigo_p,turno,medico,especialidad,hora,saldo_total,id_user,id_medico, dia } = req.body
             const { id_Paciente } = req.params;
             var id_especialidad = resp[0].id
             return Citas_Medicas
-              .create({
-                numero_ficha,
-                estado,            
+              .create({ 
+                dia,         
                 codigo_p,
                 turno,
                 medico,
@@ -369,6 +373,24 @@ class Citas_medica {
       }
     })
     .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
+  }
+
+  //Reporte para poder mostrar la cita segun el paciente
+  static citas_paciente_historial(req, res) {
+    const { historial } = req.body
+    if (!historial){
+      res.status(400).json({
+        success:false,
+        msg:"Seleccioné doctor por favor"
+      })
+    }else{
+      return Citas_Medicas
+      .findAll({
+        where:{codigo_p: historial}
+      })
+      .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
+    }
+    
   }
 
  

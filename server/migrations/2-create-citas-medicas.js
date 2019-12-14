@@ -23,6 +23,9 @@ module.exports = {
         allowNull: false, 
         defaultValue: true
       },
+      dia:{
+        type: Sequelize.STRING
+      },
       codigo_p: {
         type: Sequelize.INTEGER,
       },

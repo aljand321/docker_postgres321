@@ -204,9 +204,15 @@ const { alergias } = model;
             
         }); 
     }
-    
+  }
 
-}
+  static list_paciente_r(req, res) {
+    return Pacientes
+    .findAll({
+      attributes:['id','numeroHistorial', 'nombre', 'apellidop', 'apellidom', 'ci', 'fechanacimiento', 'sexo']
+    })
+    .then(Pacientes => res.status(200).send(Pacientes));
+  }
 }
         
 export default Paciente;
