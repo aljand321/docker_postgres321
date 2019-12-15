@@ -99,6 +99,8 @@ app.post('/api/report_citas/:id_medico', Citas_medica.reporte_citas) // esto es 
 
 app.post('/api/citas_paciente_historial', Citas_medica.citas_paciente_historial) // ruta para poder mostrar reporte de lista de citas segun el paciente
 
+app.post('/api/lista_emergencia_hoy/:id_medico', Citas_medica.lista_emergencia_hoy)
+
 ///consultas
 app.post('/api/reg_consulta/:id_cita', Consulta.reg_consulta);
 app.get('/api/reg_consultas', Consulta.getConsulta);
