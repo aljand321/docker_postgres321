@@ -69,6 +69,8 @@ app.post('/api/update_data_paciente/:id_paciente', Paciente.update_paciente_data
 app.get('/api/list_pacientes', Paciente.list_pacientes_name)
 app.get('/api/list_onli_pacientes', Paciente.list_only_pacientes);
 
+app.get('/api/list_paciente_r', Paciente.list_paciente_r)
+
 ////citas
 app.post('/api/reg_cita/:id_Paciente', Citas_medica.reg_cita);
 app.get('/api/reg_citas', Citas_medica.getCitas);
@@ -95,7 +97,9 @@ app.get('/prueba',Citas_medica.get_pruebas)
 
 app.post('/api/report_citas/:id_medico', Citas_medica.reporte_citas) // esto es para el reporte de citas medicas de una sola tabla
 
+app.post('/api/citas_paciente_historial', Citas_medica.citas_paciente_historial) // ruta para poder mostrar reporte de lista de citas segun el paciente
 
+app.post('/api/lista_emergencia_hoy/:id_medico', Citas_medica.lista_emergencia_hoy)
 
 ///consultas
 app.post('/api/reg_consulta/:id_cita', Consulta.reg_consulta);

@@ -23,6 +23,17 @@ module.exports = {
         allowNull: false, 
         defaultValue: true
       },
+      estado_atendido: {
+        type: Sequelize.BOOLEAN, 
+        allowNull: false, 
+        defaultValue: true
+      },
+      dia:{
+        type: Sequelize.STRING
+      },
+      fecha:{
+        type: Sequelize.STRING
+      },
       codigo_p: {
         type: Sequelize.INTEGER,
       },

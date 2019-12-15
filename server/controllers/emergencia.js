@@ -11,66 +11,81 @@ const { PapeletaInternacion } = model;
 class Emergencias {
     static Emergencia(req, res){
         const { fechaAtencion, Nhistorial,nombreDoctor,motivoConsulta,diagnostico,tratamiento,observaciones,idDoctor } = req.body
-        if(!fechaAtencion || !Nhistorial || !nombreDoctor || !motivoConsulta || !diagnostico || diagnostico.length == 0 || !tratamiento || !idDoctor){
-          if(!fechaAtencion){
-            res.status(200).json({
+        const  { idCita }  = req.params
+        return Citas_Medicas
+        .findAll({
+          where: { id : idCita}
+        })
+        .then(cita_data => {
+          if(cita_data[0].estado_atendido == false){
+            res.status(400).json({
               success:false,
-              msg:"Fecha es Obligatorio"
+              msg: "Esta consulta ya no se puede registrar por que ya paso el tiempo"
             })
-          }else if (!Nhistorial){
-            res.status(200).json({
-              success:false,
-              msg:"No se esta mandando el N° de historial del paciente"
-            })
-          }else if(!nombreDoctor){
-            res.status(200).json({
-              success:false,
-              msg:"No se esta mandando el nombre del doctor"
-            })
-          }else if(!motivoConsulta){
-            res.status(200).json({
-              success:false,
-              msg:"Motivo de consulta es obligatorio"
-              
-            })
-          }else if(!diagnostico || diagnostico.length == 0){
-            res.status(200).json({
-              success:false,
-              msg:"El diagnostico es obligatorio"
+          }else{
+            if(!fechaAtencion || !Nhistorial || !nombreDoctor || !motivoConsulta || !diagnostico || diagnostico.length == 0 || !tratamiento || !idDoctor){
+              if(!fechaAtencion){
+                res.status(200).json({
+                  success:false,
+                  msg:"Fecha es Obligatorio"
+                })
+              }else if (!Nhistorial){
+                res.status(200).json({
+                  success:false,
+                  msg:"No se esta mandando el N° de historial del paciente"
+                })
+              }else if(!nombreDoctor){
+                res.status(200).json({
+                  success:false,
+                  msg:"No se esta mandando el nombre del doctor"
+                })
+              }else if(!motivoConsulta){
+                res.status(200).json({
+                  success:false,
+                  msg:"Motivo de consulta es obligatorio"
+                  
+                })
+              }else if(!diagnostico || diagnostico.length == 0){
+                res.status(200).json({
+                  success:false,
+                  msg:"El diagnostico es obligatorio"
+                 
+                })
+              }else if(!tratamiento){
+                res.status(400).json({
+                  success:false,
+                  msg:"Trata miento es obligatorio"
+                })
+              }else if (!idDoctor){
+                res.status(400).json({
+                  success:false,
+                  msg:"Id de medico no se esta mandando"
+                })
+              }
+            }else{
              
-            })
-          }else if(!tratamiento){
-            res.status(400).json({
-              success:false,
-              msg:"Trata miento es obligatorio"
-            })
-          }else if (!idDoctor){
-            res.status(400).json({
-              success:false,
-              msg:"Id de medico no se esta mandando"
-            })
+              return emergencia
+              .create({
+                fechaAtencion,
+                Nhistorial,
+                nombreDoctor,
+                motivoConsulta,
+                diagnostico,
+                tratamiento,
+                observaciones,
+                idCita,
+                idDoctor           
+              })
+              .then(data => res.status(200).send({
+                  success: true,
+                  msg: "Se insertaron los datos correctamente",
+                  data
+              }))
+              .catch(error => res.status(400).send(error));       
+            }
           }
-        }else{
-          const  { idCita }  = req.params
-          return emergencia
-          .create({
-            fechaAtencion,
-            Nhistorial,
-            nombreDoctor,
-            motivoConsulta,
-            diagnostico,
-            tratamiento,
-            observaciones,
-            idCita,
-            idDoctor           
-          })
-          .then(data => res.status(200).send({
-              success: true,
-              msg: "Se insertaron los datos correctamente",
-              data
-          }))
-          .catch(error => res.status(400).send(error));       
-        }
+        })
+      
         
     }
     // Servicio para para mostrar emergencias
@@ -233,7 +248,7 @@ export default Emergencias
   update();
 },10000);
  */
-setInterval(update, 60000 )  
+setInterval(update, 600000 )  
 
 function update (req, res){
   return emergencia                
