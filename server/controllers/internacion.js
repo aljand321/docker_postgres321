@@ -1,16 +1,18 @@
 import model from '../models';
 
+
 const { Internaciones } = model;
 const { PapeletaInternacion } = model;
 
 const { Consultas } = model;
 const { emergencia } = model;
 const { Citas_Medicas } = model;
+
 const { Pacientes } = model;
 
 const { Camas } = model;
 const { Salas } = model;
-
+const { epicrisis } = model;
 class Intern { 
   static Internacion(req,res){
     
@@ -448,6 +450,22 @@ class Intern {
     })
     .then(data => res.status(200).send(data));                       
   } 
+
+  // rutas para el historial clinico
+  static one_internacion_for_historial(req, res){                
+    const { id_internacion } = req.params
+    Internaciones.findAll({
+       where: { id: id_internacion },
+       //attributes: ['id', ['description', 'descripcion']]
+      include:[{
+        model: epicrisis
+      }]
+
+     }).then((data) => {
+       res.status(200).json(data);
+     });     
+  }
+
  }
 
 

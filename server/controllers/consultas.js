@@ -51,28 +51,42 @@ class Consulta {
           })
         }
       }else{
-      var  id_cita  = req.params.id_cita;
-      return Consultas
-        .create({
-          id_cita,  // este es el id de la cita medica
-          tipoConsulta,
-          fechaConsulta,
-          numeroHistorial,
-          anamnesis,
-          diagnostico,
-          tratamiento,
-          observaciones,
-          id_medico
+        return Citas_Medicas
+        .findAll({
+          where: { id : req.params.id_cita}
         })
-        .then(consultaData => res.status(201).send({
-          success: true,
-          msg: 'consulta guardada',
-          consultaData
-        }))
+        .then(cita_data => {
+          if(cita_data[0].estado_atendido == false){
+            res.status(400).json({
+              success:false,
+              msg: "Esta consulta ya no se puede registrar por que ya paso el tiempo"
+            })
+          }else{
+            var  id_cita  = req.params.id_cita;
+            return Consultas
+            .create({
+              id_cita,  // este es el id de la cita medica
+              tipoConsulta,
+              fechaConsulta,
+              numeroHistorial,
+              anamnesis,
+              diagnostico,
+              tratamiento,
+              observaciones,
+              id_medico
+            })
+            .then(consultaData => res.status(201).send({
+              success: true,
+              msg: 'consulta guardada',
+              consultaData
+            }))
+          }
+        });
+        
       }
     }
     static getConsulta(req, res) {
-        return Consultas
+      return Consultas
      .findAll()
      .then(Consultas => res.status(200).send(Consultas));
      }

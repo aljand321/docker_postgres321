@@ -99,6 +99,8 @@ app.post('/api/report_citas/:id_medico', Citas_medica.reporte_citas) // esto es 
 
 app.post('/api/citas_paciente_historial', Citas_medica.citas_paciente_historial) // ruta para poder mostrar reporte de lista de citas segun el paciente
 
+app.post('/api/lista_emergencia_hoy/:id_medico', Citas_medica.lista_emergencia_hoy)
+
 ///consultas
 app.post('/api/reg_consulta/:id_cita', Consulta.reg_consulta);
 app.get('/api/reg_consultas', Consulta.getConsulta);
@@ -179,6 +181,7 @@ app.post('/api/update_estado_alta/:id', Intern.update_estado_alta) // ruta para 
 app.post('/api/Internacion_of_traslado/:id_traslado/:idCama', Intern.Internacion_of_traslado) // ruta para poder registrar la internacion de traslado
 app.get('/api/one_intern_of_traslado/:id_traslado', Intern.one_intern_of_traslado)
 
+app.get('/api/one_internacion_for_historial/:id_internacion', Intern.one_internacion_for_historial );
 
 //responssables del apciente
 app.post('/api/responsable/:id_paciente', Responsables.respRegsitro);

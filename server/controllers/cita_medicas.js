@@ -42,19 +42,25 @@ class Citas_medica {
           success:false,
           msg : "Por favor inserte dia"
         })
-      }      
+      }else if (!req.body.fecha){
+        res.status(400).json({
+          success:false,
+          msg : "no se esta mandando la fecha"
+        })
+      }    
       else{
         fetch('http://localhost:4600/api/nombreConsulta_especilidad/'+req.body.especialidad)
         .then(resp => resp.json())
         .catch(error => console.error('Error',error))
         .then(resp => {
           if(resp != ""){
-            const { codigo_p,turno,medico,especialidad,hora,saldo_total,id_user,id_medico, dia } = req.body
+            const { codigo_p,turno,medico,especialidad,hora,saldo_total,id_user,id_medico, dia, fecha } = req.body
             const { id_Paciente } = req.params;
             var id_especialidad = resp[0].id
             return Citas_Medicas
               .create({ 
-                dia,         
+                dia,
+                fecha,         
                 codigo_p,
                 turno,
                 medico,
@@ -190,13 +196,15 @@ class Citas_medica {
         .findByPk(req.params.id)
         .then((data) => {
           data.update({
-            estado : estado1
+            estado : estado1,
+            estado_update: estado1
           })
           .then(update => {
             res.status(200).send({
               message: 'se actualizo el estado',
               data : {
-                estado : estado  || update.estado 
+                estado : estado  || update.estado, 
+                estado_update : estado_update  || update.estado_update 
               }
             })
             .catch(error => res.status(400).send(error))
@@ -393,9 +401,73 @@ class Citas_medica {
     
   }
 
- 
+  static lista_emergencia_hoy (req,res){
+    const { id_medico } = req.params
+    const { fecha } = req.body;
+    if (!fecha){
+      res.status(400).json({
+        success:false,
+        msg:"No se esta mandando la fecha"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        // el url es para identificar si es emergencia o consulta medica
+        //attributes: ['id','estado','codigo_p','hora','especialidad'],
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'true'}}, 
+        {especialidad: {[Op.eq]: 'CONSUL. EMERGENCIA'}} , {fecha: {[Op.eq]: fecha}} ]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']}
+        ]
+      }).then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No tienes citas para hoy, fecha:" +fecha
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }
+    
+  }
 
 }
-
-
 export default Citas_medica;
+setInterval(update_estado, 600000 )  
+
+function update_estado  (req,res){
+  return Citas_Medicas
+  .findAll({
+    where:{ estado_atendido : true }
+  })
+  .then(data => {    
+    if(data != ""){
+      console.log("  <<<<<<<<<<<<<<<<<<<<< < < < < < < < ")
+      for(var i = 0; i < data.length; i++){
+        /* console.log(data[i].estado_atendido) */
+        var estado1 = 'false'
+        return Citas_Medicas
+          .findByPk(data[i].id)
+          .then((data) => {
+            data.update({
+              estado_atendido: estado1,                              
+          })
+          .then(update => {
+            console.log (update.estado_atendido, " Se actualizarion los datos")
+          })
+          .catch(error => {
+              console.log(error)
+              
+            });
+          })
+          .catch(error =>{
+            console.log(error)
+            
+          }); 
+      }
+    }
+    
+  });
+}
