@@ -32,7 +32,7 @@ class Consulta {
         }else if(diagnostico == ""){
           res.status(400).json({
             success:false,
-            msg:"Inserte el diagnostico del paciente por favor"
+            msg:"Inserte el diagnóstico del paciente por favor"
           })
         }else if(tratamiento == ""){
           res.status(400).json({
@@ -59,7 +59,7 @@ class Consulta {
           if(cita_data[0].estado_atendido == false){
             res.status(400).json({
               success:false,
-              msg: "Esta consulta ya no se puede registrar por que ya paso el tiempo"
+              msg: "Esta consulta ya no se puede registrar por que ya paso el tiempo de registro"
             })
           }else{
             var  id_cita  = req.params.id_cita;
@@ -77,7 +77,7 @@ class Consulta {
             })
             .then(consultaData => res.status(201).send({
               success: true,
-              msg: 'consulta guardada',
+              msg: 'Consulta correctamente guardada',
               consultaData
             }))
           }
