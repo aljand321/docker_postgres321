@@ -11,7 +11,7 @@ const { Pacientes } = model;
 class Citas_medica {
     
     static reg_cita(req, res) {
-     
+     console.log(req.body, "  asdasdasdalksdjlaksjdlaskjdlaskdj")
       if(!req.body.especialidad){
         res.status(400).json({
           success:false,

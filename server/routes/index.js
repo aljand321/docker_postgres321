@@ -181,6 +181,7 @@ app.post('/api/update_estado_alta/:id', Intern.update_estado_alta) // ruta para 
 app.post('/api/Internacion_of_traslado/:id_traslado/:idCama', Intern.Internacion_of_traslado) // ruta para poder registrar la internacion de traslado
 app.get('/api/one_intern_of_traslado/:id_traslado', Intern.one_intern_of_traslado)
 
+app.get('/api/one_internacion_for_historial/:id_internacion', Intern.one_internacion_for_historial );
 
 //responssables del apciente
 app.post('/api/responsable/:id_paciente', Responsables.respRegsitro);

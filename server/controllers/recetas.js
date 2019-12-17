@@ -398,7 +398,7 @@ function update_estado (req,res){
               console.log(error)
               res.status(400).json({
                 success:false,
-                msg: "no se puedo actualizar los datos"
+                msg: "No se puedo actualizar los datos"
               })
             });
           })
@@ -406,7 +406,7 @@ function update_estado (req,res){
             console.log(error)
             res.status(500).json({
               success:false,
-              msg: "no se puedo actualizar los datos"
+              msg: "No se puedo actualizar los datos"
             })
           });
       }
