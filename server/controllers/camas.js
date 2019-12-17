@@ -32,7 +32,7 @@ import model from '../models';
                 })
                 .then(data => res.status(200).send({
                     success: true,
-                    msg: "Se introdujo una cama",
+                    msg: "Se inseto una cama",
                     data
                 }))
                 .catch(error => {

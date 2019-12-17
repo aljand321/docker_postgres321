@@ -79,7 +79,7 @@ class Sala {
                   .then(data => {
                     res.status(200).json({
                       success: true,
-                      msg: 'Se inserto correctamente',
+                      msg: 'Datos Ingresados Correctamente.',
                       data
                     })
                   })
@@ -105,7 +105,7 @@ class Sala {
               .then(data => {
                 res.status(200).json({
                   success: true,
-                  msg: 'Se inserto correctamente',
+                  msg: 'Datos Ingresados Correctamente.',
                   data
                 })
               })
@@ -245,7 +245,7 @@ class Sala {
           .then(update => {
             res.status(200).send({
               success:true,
-              msg: 'Sala actualizado',
+              msg: 'Sala actualizada',
               data: {
                 nombre: nombre || update.nombre,
                 descripcionSala: descripcionSala || update.descripcionSala,
