@@ -19,7 +19,7 @@ class Consulta {
         if (data1 != ""){
           res.status(400).json({
             success:false,
-            msg:"ya no se puede registrar otra consulta en esta cita medica"
+            msg:"Ya no se puede registrar otra consulta en esta cita médica"
           })
         }else{
           if(tipoConsulta == "" || anamnesis == "" || fechaConsulta == "" || numeroHistorial == "" || isNaN(numeroHistorial) || diagnostico == "" || tratamiento == "" || id_medico == "" || isNaN(id_medico)){
@@ -91,7 +91,7 @@ class Consulta {
                 })
                 .then(consultaData => res.status(201).send({
                   success: true,
-                  msg: 'consulta guardada',
+                  msg: 'Consulta guardada',
                   consultaData
                 }))
               }

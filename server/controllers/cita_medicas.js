@@ -11,7 +11,7 @@ const { Pacientes } = model;
 class Citas_medica {
     
     static reg_cita(req, res) {
-     
+     console.log(req.body, "  asdasdasdalksdjlaksjdlaskjdlaskdj")
       if(!req.body.especialidad){
         res.status(400).json({
           success:false,
@@ -301,7 +301,7 @@ class Citas_medica {
   static lista_pacienteDoctor_false(req,res){
     const { id_medico } = req.params
     Citas_Medicas.findAll({
-      where : { id_medico : id_medico, estado: "false" }, // el url es para identificar si es emergencia o consulta medica
+      where : { id_medico : id_medico, estado: "false", estado_atendido : true }, // el url es para identificar si es emergencia o consulta medica
       //attributes: ['id','estado','codigo_p','hora','especialidad'],
       include: [
         {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom'] }
@@ -439,7 +439,7 @@ class Citas_medica {
   static citas_wit_consulta(req, res) {
     return Citas_Medicas
     .findAll({
-      where:{estado: "false"},
+      where:{estado: "false", estado_atendido : true},
       include:[{
         model:Pacientes,
         attributes:['id', 'numeroHistorial', 'nombre', 'apellidop', 'apellidom', 'ci', 'fechanacimiento']
