@@ -116,6 +116,9 @@ app.get('/api/pacietnes_Atendidos/:id_medico', Citas_medica.pacietnes_Atendidos)
 
 app.post('/api/cita_hoy_consulta_externa/:id_medico', Citas_medica.cita_hoy_consulta_externa) // consulta de hoy de consulata externa
 
+app.post('/api/pacientes_no_atendidos_emg/:id_medico', Citas_medica.pacientes_no_atendidos_emg) // pacietnes no atendidos emergecnia 
+app.post('/api/pacientes_atendidos_emg/:id_medico', Citas_medica.pacientes_atendidos_emg) // pacietnes no atendidos emergecnia 
+
 ///consultas
 app.post('/api/reg_consulta/:id_cita', Consulta.reg_consulta);
 app.get('/api/reg_consultas', Consulta.getConsulta);

@@ -314,7 +314,7 @@ class Citas_medica {
   static lista_emergencia (req,res){
     const { id_medico } = req.params
     Citas_Medicas.findAll({
-      where : { id_medico : id_medico, estado: 'true', especialidad: 'CONSUL. EMERGENCIA' }, // el url es para identificar si es emergencia o consulta medica
+      where : { id_medico : id_medico, estado: 'true', especialidad: 'CONSUL. EMERGENCIA',estado_atendido: null }, // el url es para identificar si es emergencia o consulta medica
       //attributes: ['id','estado','codigo_p','hora','especialidad'],
       include: [
         {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom'] }
@@ -327,7 +327,7 @@ class Citas_medica {
   static lista_emergencia_false (req,res){
     const { id_medico } = req.params
     Citas_Medicas.findAll({
-      where : { id_medico : id_medico, estado: 'false', especialidad: 'CONSUL. EMERGENCIA' }, // el url es para identificar si es emergencia o consulta medica
+      where : { id_medico : id_medico, estado: 'false', especialidad: 'CONSUL. EMERGENCIA', estado_atendido:true }, // el url es para identificar si es emergencia o consulta medica
       //attributes: ['id','estado','codigo_p','hora','especialidad'],
       include: [
         {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom'] }
@@ -604,6 +604,75 @@ class Citas_medica {
           res.status(400).json({
             success:false,
             msg:"No tienes citas para hoy, fecha:" +fecha
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }  
+      
+  }
+  /*
+    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+                                        pacientes no atendidos emergecnia
+    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< 
+   */
+
+  static pacientes_no_atendidos_emg (req,res){
+    const { id_medico } = req.params
+    const { fecha_inicio, fecha_final, historial } = req.body;
+    if (!fecha_inicio || !fecha_final || !historial){
+      res.status(400).json({
+        success:false,
+        msg:"Tdos los campos son obligatorios"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        // el url es para identificar si es emergencia o consulta medica
+        //attributes: ['id','estado','codigo_p','hora','especialidad'],
+        where: {[Op.and]: [ {especialidad: {[Op.eq]: 'CONSUL. EMERGENCIA' }}, {id_medico: {[Op.eq]: id_medico}}, {estado_atendido: {[Op.eq]: 'false'}}, {codigo_p: {[Op.eq]: historial}},
+        {createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }} ]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']}
+        ]
+      }).then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No hay nada que mostrar"
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }    
+  }
+  static pacientes_atendidos_emg (req,res){
+    const { id_medico } = req.params
+    const { fecha_inicio, fecha_final, historial } = req.body;
+    if (!fecha_inicio || !fecha_final || !historial){
+      res.status(400).json({
+        success:false,
+        msg:"Tdos los campos son obligatorios"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        // el url es para identificar si es emergencia o consulta medica
+        //attributes: ['id','estado','codigo_p','hora','especialidad'],
+        where: {[Op.and]: [{especialidad: {[Op.eq]: 'CONSUL. EMERGENCIA' }}, {id_medico: {[Op.eq]: id_medico}}, {estado_atendido: {[Op.eq]: 'true'}}, {codigo_p: {[Op.eq]: historial}},
+        {createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }} ]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']}
+        ]
+      }).then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No hay nada que mostrar"
           })
         }else{
           res.status(200).send(data)  
