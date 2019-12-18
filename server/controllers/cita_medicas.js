@@ -192,19 +192,22 @@ class Citas_medica {
       //serv para camviar el estado de cita_medica
       static estado(req,res){
         var estado1 = 'false';
+        var estado2 = 'true'
         return Citas_Medicas
         .findByPk(req.params.id)
         .then((data) => {
           data.update({
             estado : estado1,
-            estado_update: estado1
+            estado_update: estado1,
+            estado_atendido: estado2
           })
           .then(update => {
             res.status(200).send({
               message: 'se actualizo el estado',
               data : {
                 estado : estado  || update.estado, 
-                estado_update : estado_update  || update.estado_update 
+                estado_update : estado_update  || update.estado_update,
+                estado_atendido : estado_atendido  || update.estado_atendido  
               }
             })
             .catch(error => res.status(400).send(error))
@@ -284,7 +287,7 @@ class Citas_medica {
   static lista_pacienteDoctor(req,res){
     const { id_medico } = req.params
     Citas_Medicas.findAll({
-      where : { id_medico : id_medico, estado: "true" }, // el url es para identificar si es emergencia o consulta medica
+      where : { id_medico : id_medico, estado: "true", estado_atendido : null }, // el url es para identificar si es emergencia o consulta medica
       //attributes: ['id','estado','codigo_p','hora','especialidad'],
       include: [
         {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom'] }
@@ -429,18 +432,194 @@ class Citas_medica {
         }
                
       }) 
-    }
-    
+    }    
   }
 
+  //lista citas con pacientes
+  static citas_wit_consulta(req, res) {
+    return Citas_Medicas
+    .findAll({
+      where:{estado: "false"},
+      include:[{
+        model:Pacientes,
+        attributes:['id', 'numeroHistorial', 'nombre', 'apellidop', 'apellidom', 'ci', 'fechanacimiento']
+      }]
+    })
+    .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
+  }
+
+  static pacietnes_noAtendidos(req, res) {
+    const { id_medico } = req.params
+    return Citas_Medicas
+    .findAll({
+      where:{ id_medico: id_medico, estado_atendido: false},
+      include:[{
+        model:Pacientes,
+        attributes:['id', 'numeroHistorial', 'nombre', 'apellidop', 'apellidom', 'ci', 'fechanacimiento']
+      }]
+    })
+    .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
+  }
+
+  static filter_citas_consulta_externa (req,res){ 
+    const { fecha_inicio, fecha_final, historial } = req.body;
+    console.log(req.body)
+    if (!fecha_inicio || !fecha_final || !historial){
+      res.status(400).json({
+        success:false,
+        msg:"No se esta mandando la fecha"
+      })
+    }else{
+      Citas_Medicas.findAll({
+       
+        where: {[Op.and]: [ {codigo_p: {[Op.eq]: historial }}, {estado: {[Op.eq]: 'false'}}, {createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }} ]},
+        include: [          
+          { model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']  }
+        ]
+
+      })
+      .then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No hay nada para mostrar"
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }    
+  }
+
+  static pacientes_no_atendidos (req,res){
+    const { id_medico } = req.params
+    const { fecha_inicio, fecha_final, historial } = req.body;
+    if (!fecha_inicio || !fecha_final || !historial){
+      res.status(400).json({
+        success:false,
+        msg:"No se esta mandando la fecha"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        // el url es para identificar si es emergencia o consulta medica
+        //attributes: ['id','estado','codigo_p','hora','especialidad'],
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado_atendido: {[Op.eq]: 'false'}}, {codigo_p: {[Op.eq]: historial}},
+        {createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }} ]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']}
+        ]
+      }).then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No hay nada que mostrar"
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }    
+  }
+  /* 
+    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+      pacientes atendidos
+    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  */
+  static pacietnes_Atendidos(req, res) {
+    const { id_medico } = req.params
+    return Citas_Medicas
+    .findAll({
+      where:{ id_medico: id_medico, estado_atendido: true},
+      include:[{
+        model:Pacientes,
+        attributes:['id', 'numeroHistorial', 'nombre', 'apellidop', 'apellidom', 'ci', 'fechanacimiento']
+      }]
+    })
+    .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
+  }
+
+  static pacientes_atendidos (req,res){
+    const { id_medico } = req.params
+    const { fecha_inicio, fecha_final, historial } = req.body;
+    if (!fecha_inicio || !fecha_final || !historial){
+      res.status(400).json({
+        success:false,
+        msg:"Tdos los campos son obligatorios"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        // el url es para identificar si es emergencia o consulta medica
+        //attributes: ['id','estado','codigo_p','hora','especialidad'],
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado_atendido: {[Op.eq]: 'true'}}, {codigo_p: {[Op.eq]: historial}},
+        {createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }} ]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']}
+        ]
+      }).then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No hay nada que mostrar"
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }    
+  }
+
+  static cita_hoy_consulta_externa(req,res){
+    /* const { id_medico } = req.params
+    Citas_Medicas.findAll({
+      where : { id_medico : id_medico, estado: "true", estado_atendido : null }, // el url es para identificar si es emergencia o consulta medica
+      //attributes: ['id','estado','codigo_p','hora','especialidad'],
+      include: [
+        {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom'] }
+      ]
+    }).then(users => {
+      
+      res.status(200).send(users)
+    }) */
+    const { id_medico } = req.params
+    const { fecha } = req.body;
+    if (!fecha){
+      res.status(400).json({
+        success:false,
+        msg:"No se esta mandando la fecha"
+      })
+    }else{
+      Citas_Medicas.findAll({
+        // el url es para identificar si es emergencia o consulta medica
+        //attributes: ['id','estado','codigo_p','hora','especialidad'],
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'true'}}, 
+        {estado_atendido: {[Op.eq]: null}} , {fecha: {[Op.eq]: fecha}} ]},
+        include: [
+          {model: Pacientes, attributes: ['id','nombre', 'apellidop','apellidom']}
+        ]
+      }).then(data => {     
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No tienes citas para hoy, fecha:" +fecha
+          })
+        }else{
+          res.status(200).send(data)  
+        }
+               
+      }) 
+    }    
+  }
 }
 export default Citas_medica;
-setInterval(update_estado, 600000 )  
+//setInterval(update_estado, 1000 )  
 
 function update_estado  (req,res){
   return Citas_Medicas
   .findAll({
-    where:{ estado_atendido : true }
+    where:{ estado_atendido : null }
   })
   .then(data => {    
     if(data != ""){
@@ -452,6 +631,8 @@ function update_estado  (req,res){
           .findByPk(data[i].id)
           .then((data) => {
             data.update({
+              estado: estado1,
+              estado_update:estado1,
               estado_atendido: estado1,                              
           })
           .then(update => {

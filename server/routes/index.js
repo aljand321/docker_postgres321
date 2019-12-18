@@ -57,6 +57,8 @@ app.get('/api/DElcama/:id', Camas.delCama);
 app.get('/api/updateEstadoCama/:idCama/:historial', Camas.CamaEstado); // esta ruta es para poder cambiar el estado del paciente y poder insertar el historial del paciente
 app.post('/api/updateCama_estado/:idCama',Camas.Update_cama_estado); // esta ruta es para canviar el estado de la cama a false y borrar el historial
 
+app.get('/api/lista_camas_salas/:id', Camas.camas_sala)
+
 ///reg_pacientes
 app.post('/api/pacientes', Paciente.registroPaciente);
 app.get('/api/pacientes', Paciente.getPaciente);
@@ -71,6 +73,7 @@ app.get('/api/list_onli_pacientes', Paciente.list_only_pacientes);
 
 app.get('/api/list_paciente_r', Paciente.list_paciente_r)
 
+app.get('/api/lista_paciente_all', Paciente.paciente_list)
 ////citas
 app.post('/api/reg_cita/:id_Paciente', Citas_medica.reg_cita);
 app.get('/api/reg_citas', Citas_medica.getCitas);
@@ -91,7 +94,7 @@ app.get('/api/lista_pacienteDoctor_false/:id_medico', Citas_medica.lista_pacient
 app.get('/api/lista_emergencia/:id_medico', Citas_medica.lista_emergencia); //lista de citas solo de emergencia
 app.get('/api/lista_emergencia_false/:id_medico', Citas_medica.lista_emergencia_false);// lista false de emergencia
 
-app.post('/api/lista_consultas/:id_medico',Citas_medica.lista_consultas ) // ruta para buscar por fechas 
+app.post('/api/lista_consultas/:id_medico',Citas_medica.lista_consultas ) // ruta para buscar por fechas   
 
 app.get('/prueba',Citas_medica.get_pruebas)
 
@@ -100,6 +103,18 @@ app.post('/api/report_citas/:id_medico', Citas_medica.reporte_citas) // esto es 
 app.post('/api/citas_paciente_historial', Citas_medica.citas_paciente_historial) // ruta para poder mostrar reporte de lista de citas segun el paciente
 
 app.post('/api/lista_emergencia_hoy/:id_medico', Citas_medica.lista_emergencia_hoy)
+
+app.get( '/api/citas_wit_consulta', Citas_medica.citas_wit_consulta )
+
+app.post('/api/filter_citas_consulta_externa', Citas_medica.filter_citas_consulta_externa)// esta ruta es para poder filtrar  por fechas las citas del paciente que ya han cido atendidos
+
+app.post('/api/pacientes_no_atendidos/:id_medico', Citas_medica.pacientes_no_atendidos)
+app.get('/api/pacietnes_noAtendidos/:id_medico', Citas_medica.pacietnes_noAtendidos)
+
+app.post('/api/pacientes_atendidos/:id_medico', Citas_medica.pacientes_atendidos)
+app.get('/api/pacietnes_Atendidos/:id_medico', Citas_medica.pacietnes_Atendidos)
+
+app.post('/api/cita_hoy_consulta_externa/:id_medico', Citas_medica.cita_hoy_consulta_externa) // consulta de hoy de consulata externa
 
 ///consultas
 app.post('/api/reg_consulta/:id_cita', Consulta.reg_consulta);
@@ -110,6 +125,8 @@ app.get('/api/updateConsulta/:id', Consulta.updateConsulta); //para poder sacar 
 app.post('/api/updateConsulta/:id', Consulta.updateCOnsPost) //serv para actualizar consulta 
 
 app.get('/api/one_consulta_id/:id_consulta', Consulta.One_Consulta_id)
+
+app.get('/api/get_one_conulta_p/:id_cita', Consulta.get_one_conulta_p); // esta ruta muestra una consulta con su papeleta de internacion
 ///recetas
 app.post('/api/reg_Receta/:id_consulta', Receta.post_recetaConsulta);
 app.post('/api/reg_RecetaEmrg/:id_emergencia', Receta.post_receta);
@@ -182,6 +199,10 @@ app.post('/api/Internacion_of_traslado/:id_traslado/:idCama', Intern.Internacion
 app.get('/api/one_intern_of_traslado/:id_traslado', Intern.one_intern_of_traslado)
 
 app.get('/api/one_internacion_for_historial/:id_internacion', Intern.one_internacion_for_historial );
+
+app.post('/api/list_internacion_p_hst', Intern.list_internacion_p_hst)
+
+app.post('/api/list_internacion_especialidad_false21/:id_especialidad', Intern.list_internacion_especialidad_false21)
 
 //responssables del apciente
 app.post('/api/responsable/:id_paciente', Responsables.respRegsitro);

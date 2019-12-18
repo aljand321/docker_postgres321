@@ -209,6 +209,17 @@ import model from '../models';
           })
         }        
       }
+
+      // Servicio para mostar camas segun la sala que le corresponda 
+      static camas_sala(req, res){                
+        var id = req.params.id;  
+        Camas.findAll({
+          where: {salaID: id}
+          //attributes: ['id', ['description', 'descripcion']]
+        }).then((data) => {
+          res.status(200).json(data);
+        });     
+      }
     }
 
 export default Cama

@@ -24,9 +24,7 @@ module.exports = {
         defaultValue: true
       },
       estado_atendido: {
-        type: Sequelize.BOOLEAN, 
-        allowNull: false, 
-        defaultValue: true
+        type: Sequelize.BOOLEAN
       },
       dia:{
         type: Sequelize.STRING

@@ -213,6 +213,14 @@ const { alergias } = model;
     })
     .then(Pacientes => res.status(200).send(Pacientes));
   }
+
+  static paciente_list(req, res) {
+    return Pacientes
+    .findAll({
+      attributes:['id','numeroHistorial','nombre','apellidop','apellidom']
+    })
+    .then(Pacientes => res.status(200).send(Pacientes));
+  }
 }
         
 export default Paciente;

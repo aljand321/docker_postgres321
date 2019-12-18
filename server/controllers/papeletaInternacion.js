@@ -138,8 +138,8 @@ class papeletaInt{
        }).then((data) => {
          res.status(200).json(data);
        });     
-  }
-
+    }
+    
     //serv para sacar las consultas de un paciente
     static getPinternacionPaciente(req, res){                
       var historial = req.params.historial;

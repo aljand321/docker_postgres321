@@ -1,5 +1,7 @@
 import model from '../models';
+const sequelize = require('sequelize');
 
+const Op = sequelize.Op;
 
 const { Internaciones } = model;
 const { PapeletaInternacion } = model;
@@ -331,6 +333,47 @@ class Intern {
     
   }
 
+  //reporte de altas del paciente por fechas
+  static list_internacion_especialidad_false21(req, res){                
+    /* const { id_especialidad } = req.params
+    Internaciones.findAll({
+       where: { estado_alta:true, id_especialidad: id_especialidad},
+       //attributes: ['id', ['description', 'descripcion']]
+      include:[{
+        model:Pacientes
+      }]
+
+     }).then((data) => {
+       res.status(200).json(data);
+     });     */ 
+     const { id_especialidad } = req.params
+     const { fecha_inicio, fecha_final, historial }  = req.body
+        if(!fecha_final || !fecha_inicio || ! historial){
+            res.status(400).json({
+                success:false,
+                msg:"Inserte fecha inicio y fecha final y el el paciente por favor"
+            })
+        }else{
+            var _q = Internaciones;
+            _q.findAll({
+                where: {[Op.and]: [ {id_especialidad: {[Op.eq]: id_especialidad}}, {estado_alta: {[Op.eq]: 'true'}}, {historial: {[Op.eq]: historial}}, {createdAt: {[Op.gte]: fecha_inicio }}, {createdAt: {[Op.lte]: fecha_final }}]},
+                include:[{
+                  model:Pacientes
+                }]
+            })
+            .then(datas => {
+                if(datas == ""){
+                    res.status(400).json({
+                        success:false,
+                        msg:"No hay nada que mostrar"
+                    })
+                }else{
+                    res.status(200).json(datas)
+                }
+            });
+      } 
+  }
+
   /* 
   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -464,6 +507,45 @@ class Intern {
      }).then((data) => {
        res.status(200).json(data);
      });     
+  }
+
+  //list internaciones paciente
+  static list_internacion_p_hst(req, res){                
+    const { id_especialidad, historial } = req.body
+    if (!id_especialidad || !historial){
+      if(!historial){
+        res.status(400).json({
+          success:false,
+          msg:"Por favor selecione paciente"
+        })
+      }else if (!id_especialidad){
+        res.status(400).json({
+          success:false,
+          msg:"No se esta mandando el id de la especialidad"
+        })
+      }
+      
+    }else{
+      Internaciones.findAll({
+        where: { estado_alta:true, id_especialidad: id_especialidad, historial: historial},
+        //attributes: ['id', ['description', 'descripcion']]
+       include:[{
+         model:Pacientes
+       }]
+ 
+      }).then((data) => {
+        if(data == ""){
+          res.status(200).json({
+            success:false,
+            msg:"No hay internaciones del paciente en esta area"
+          })
+        }else{
+          res.status(200).json(data);
+        }
+        
+      }); 
+    }
+        
   }
 
  }
