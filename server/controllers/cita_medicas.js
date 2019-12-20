@@ -700,7 +700,7 @@ class Citas_medica {
   }
 }
 export default Citas_medica;
-//setInterval(update_estado, 1000 )  
+setInterval(update_estado, 60000 * 30 )  
 
 function update_estado  (req,res){
   return Citas_Medicas
