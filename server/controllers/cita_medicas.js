@@ -355,7 +355,7 @@ class Citas_medica {
       })
     }else{
       Citas_Medicas.findAll({
-        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'false'}}, 
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'false'}}, {estado_atendido: {[Op.eq]: 'true'}}, 
         {especialidad: {[Op.eq]: 'CONSUL. EMERGENCIA'}}, {createdAt: {[Op.gte]: fecha_inicio}}, 
         {createdAt: {[Op.lte]: fecha_final}}]},
         include: [
