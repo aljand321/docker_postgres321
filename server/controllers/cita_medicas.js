@@ -117,7 +117,15 @@ class Citas_medica {
           {createdAt: {[Op.lte]: fecha_final}}]}
         })      
         .then(data => {
-            res.status(200).json(data)       
+            if(data == ""){
+              res.status(400).json({
+                success: false,
+                msg: "No hay nada que mostrar"
+              })
+            }else{
+              res.status(200).json(data)  
+            }
+                 
         })
         .catch(error => {
             console.log(error)
@@ -347,7 +355,7 @@ class Citas_medica {
       })
     }else{
       Citas_Medicas.findAll({
-        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'false'}}, 
+        where: {[Op.and]: [{id_medico: {[Op.eq]: id_medico}}, {estado: {[Op.eq]: 'false'}}, {estado_atendido: {[Op.eq]: 'true'}}, 
         {especialidad: {[Op.eq]: 'CONSUL. EMERGENCIA'}}, {createdAt: {[Op.gte]: fecha_inicio}}, 
         {createdAt: {[Op.lte]: fecha_final}}]},
         include: [
@@ -392,14 +400,23 @@ class Citas_medica {
     if (!historial){
       res.status(400).json({
         success:false,
-        msg:"Seleccioné doctor por favor"
+        msg:"Seleccioné paciente por favor"
       })
     }else{
       return Citas_Medicas
       .findAll({
         where:{codigo_p: historial}
       })
-      .then(Citas_Medicas => res.status(200).send(Citas_Medicas));
+      .then(data => {
+        if(data == ""){
+          res.status(400).json({
+            success:false,
+            msg:"No hay nada psta mostrar"
+          })
+        }else{
+          res.status(200).json(data)
+        }
+      });
     }
     
   }
