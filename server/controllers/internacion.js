@@ -551,7 +551,7 @@ class Intern {
  }
 
 
- setInterval( update_time, 60000 )  
+ setInterval( update_time, 60000000 )  
 
   function update_time (req,res){
     return Internaciones                

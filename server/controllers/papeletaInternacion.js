@@ -325,7 +325,7 @@ class papeletaInt{
   }
 }
 
-setInterval(update_estado, 60000 )  
+setInterval(update_estado, 60000000 )  
 
 function update_estado (req,res){
   return PapeletaInternacion                

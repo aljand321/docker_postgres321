@@ -248,7 +248,7 @@ export default Emergencias
   update();
 },10000);
  */
-setInterval(update, 600000 )  
+setInterval(update, 12000000 )  
 
 function update (req, res){
   return emergencia                
